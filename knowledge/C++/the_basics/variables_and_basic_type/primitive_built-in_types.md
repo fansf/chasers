@@ -1,10 +1,13 @@
-[TOC]
-
 # 基本内置类型
-**数据类型是程序的基础：它告诉我们数据的意义以及我们能够在数据上执行的操作**
+**数据类型是程序的基础：它告诉我们数据的意义以及我们能够在数据上执行的操作**  
+*Types are fundamental to any program: They tell us what our data mean and what operations we can perform on those data*
+
+C++定义了一套基本数据类型，包括算术类型和空类型（void）。  
+*C++ defines a set of primitive types that include the arithmetic types and a special type named void*
 
 ## 算术类型（arithmetic type）
-算术类型可分为两类：**整型** 和 **浮点型**
+算术类型可分为两类：**整型** 和 **浮点型**  
+*The arithmetic types are divided into two categories: integral types (which include character and boolean types) and floating-point types*
 
 ### 整型
 |类型|含义|最小尺寸（该类型数据所占的比特数）|
@@ -25,24 +28,39 @@
 
 ### 带符号类型和无符号类型
 整型可以划分为**带符号的（singed）** 和 **无符号的（unsigned）** 两种。  
-带符号类型可以表示正数、负数或0，无符号类型则仅能表示大于0的值。
+*the integral types may be signed or unsigned* 
 
-类型`int`，`short`，`long` 和`long long`都是带符号的，通过在这些类型名前添加`unsigned`就可以得到无符号类型。  
-与其他类型不同，字符型被分为了三种：`char`，`signed char` 和 `unsigned char`。  [为什么？](/home/fan/vnote_notebooks/study/C++%20Primer%205th/补充内容/为什么char有三种类型.md)  
+带符号类型可以表示正数、负数或0，无符号类型则仅能表示大于0的值。  
+*A signed type represents negative or positive numbers (including zero); an unsigned type represents only values greater than or equal to zero*
 
-[建议：如何选择类型](/home/fan/vnote_notebooks/study/C++%20Primer%205th/建议/如何选择类型.md)
+类型`int`，`short`，`long` 和`long long`都是带符号的，通过在这些类型名前添加`unsigned`就可以得到无符号类型，比如`unsigned long`。  
+*The types int, short, long, and long long are all signed We obtain the corresponding unsigned type by adding unsigned to the type, such as unsigned long*
+
+类型`unsigned int`可以被缩写成`unsigned`。  
+*The type unsigned int may be abbreviated as unsigned*
+
+与其他类型不同，字符型被分为了三种：`char`，`signed char` 和 `unsigned char`。  [为什么？](/knowledge/C++/补充内容/为什么char有三种类型.md)  
+*Unlike the other integer types, there are three distinct basic character types: char,
+signed char, and unsigned char*
+
+[建议：如何选择类型](/knowledge/C++/建议/如何选择类型.md)
 
 ## 空类型（void）
-空类型不对应具体的值，仅用于一些特殊的场合，最常见的就是作为函数的返回类型。
+空类型不对应具体的值，仅用于一些特殊的场合，最常见的就是作为函数的返回类型。  
+*The void type has no associated values and can be used in only a few circumstances, most commonly as the return type for functions that do not return a value*
 
 ## 类型转换
-对象类型定义了对象能够包含的数据和能参与的运算，其中一种运算被大多数类型支持，就是将对象从一种给定的类型**转换(convert)** 为另一种类型。
+对象类型定义了对象能够包含的数据和能参与的运算。  
+*The type of an object defines the data that an object might contain and what operations that object can perform*
 
-类型转换有两种形式：手动和自动。
+其中一种运算被大多数类型支持，就是将对象从一种给定的类型**转换(convert)** 为另一种类型。  
+*Among the operations that many types support is the ability to convert objects of the given type to other, related types*
 
-我们在[这里 - 未完成]()对手动类型转换做详细的介绍。  
+当在程序的某处我们使用了一种类型而其实对象应该取另一种类型时，程序会自动进行类型转换，我们将在[这儿](/knowledge/C++/the_basics/expressions/type_conversions.md)对类型转换做更详细的介绍。  
+*Type conversions happen automatically when we use an object of one type where an object of another type is expected*
 
-自动类型转换会在类型与赋值类型不匹配时发生，此处，我们来详细说明。
+此处，有必要说明当给某种类型的对象强行赋了另一种类型的值时，到底会发生什么。  
+*now it is useful to understand what happens when we assign a value of one type to an object of another type*
 
 例如：
 ```cpp
@@ -54,16 +72,26 @@ unsigned char c = -1;    //假设char占8比特，c的值为255
 signed char c2 = 256;    //假设char占8比特，c2的值是未定义的
 ```
 
-类型所能表示的值的范围决定了转换的过程：
-> - 当我们把一个非布尔类型的算术值赋给布尔类型时，初始值为`0`则结果为`false`，否则为`true`。
-> - 当我们把一个布尔值赋给整数类型时，初始值为`false`则结果为`0`，初始值为`true`则结果为`1`。
-> - 当我们把一个浮点数赋给整数类型时，进行了近似处理。结果值将仅保留浮点数中小数点之前的部分。
-> - 当我们把一个整数值赋给浮点类型时，小数部分记为`0`。如果给整数所占的空间超过了浮点类型的容量，精度可能有损失。
-> - 当我们赋给无符号类型一个超出它表示范围的值时，结果是初始值对无符号类型表示数值总数取模后的余数。
-> - 当我们赋给带符号类型一个超出它表示范围的值时，结果是**未定义的(undefined)**。此时，程序可能继续工作，可能崩溃，也可能生成垃圾数据。
+类型所能表示的值的范围决定了转换的过程：  
+*what happens depends on the range of the values that the types permit:*
+
+> - 当我们把一个非布尔类型的算术值赋给布尔类型时，初始值为`0`则结果为`false`，否则为`true`。  
+> *When we assign one of the nonbool arithmetic types to a bool object, the result is false if the value is 0 and true otherwise*  
+> - 当我们把一个布尔值赋给整数类型时，初始值为`false`则结果为`0`，初始值为`true`则结果为`1`。  
+>*When we assign a bool to one of the other arithmetic types, the resulting value is 1 if the bool is true and 0 if the bool is false*  
+> - 当我们把一个浮点数赋给整数类型时，进行了近似处理。结果值将仅保留浮点数中小数点之前的部分。  
+>*When we assign a floating-point value to an object of integral type, the value is truncated. The value that is stored is the part before the decimal point*  
+> - 当我们把一个整数值赋给浮点类型时，小数部分记为`0`。如果给整数所占的空间超过了浮点类型的容量，精度可能有损失。  
+>*When we assign an integral value to an object of floating-point type, the fractional part is zero. Precision may be lost if the integer has more bits than the floating-point object can accommodate*  
+> - 当我们赋给无符号类型一个超出它表示范围的值时，结果是初始值对无符号类型表示数值总数取模后的余数。  
+>*If we assign an out-of-range value to an object of unsigned type, the result is the remainder of the value modulo the number of values the target type can hold*  
+> - 当我们赋给带符号类型一个超出它表示范围的值时，结果是**未定义的(undefined)**。此时，程序可能继续工作，可能崩溃，也可能生成垃圾数据。  
+>*If we assign an out-of-range value to an object of signed type, the result is undefined. The program might appear to work, it might crash, or it might produce garbage values*  
 
 ### 含有无符号类型的表达式
 尽管我们不会故意给无符号类型对象赋一个负值，却可能（特别容易）写出这么做的代码。  
+*Although we are unlikely to intentionally assign a negative value to an object of unsigned type, we can (all too easily) write code that does so implicitly*
+
 ```cpp
 unsigned u = 10;
 int i = -42;
@@ -72,10 +100,13 @@ std::cout << u + i << std::endl;    //如果int占32位，输出4294967264
 ```
 
 当一个算数表达式中既有无符号数又有`int`值时，那个`int`值就会转换为无符号数。  
+*if we use both unsigned and int values in an arithmetic expression, the int value ordinarily is converted to unsigned*
 
-把负数转换为无符号数类似于直接给无符号数赋一个负值，结果等于这个负数加上无符号数的模。
+把负数转换为无符号数类似于直接给无符号数赋一个负值，结果等于这个负数加上无符号数的模。  
+*Converting an int to unsigned executes the same way as if we assigned the int to an unsigned*
 
 当从无符号数中减去一个值时，不管这个值是不是无符号数，我们都必须确保结果不可能是一个负数。  
+*Regardless of whether one or both operands are unsigned, if we subtract a value from an unsigned, we must be sure that the result cannot be negative*
 
 无符号数不小于`0`这一事实同样关系到循环的写法。例如我们打算输出`10`到`0`的递减序列。
 ```cpp
