@@ -1,16 +1,20 @@
-[TOC]
-
 # C2.3 复合类型
 **复合类型（compound type）** 是指基于其他类型定义的类型。  
-C++ 语言有几种复合类型，本章将介绍其中的两种：**引用** 和 **指针**.
+*A compound type is a type that is defined in terms of another type*
 
-关于更声明语句更通用的描述是：  
+C++ 语言有几种复合类型，本章将介绍其中的两种：**引用** 和 **指针**.  
+*C++ has several compound types, two of which—references and pointers—we’ll cover in this chapter*
+
+关于声明语句更通用的描述是：  
 > 一条声明语句由**基本数据类型（base type）** 和紧随其后的一个**声明符（declarator）** 列表组成。  
 每个声明符命令了一个变量并指定该变量为基本数据类型有关的某种类型。
 
 ## 引用
 **引用（reference）** 为对象起了另一个名字，引用类型引用（refer to）另外一种类型。  
-通过将声明符写成`&d`形式来定义引用类型，其中`d`是声明的变量名。
+*A reference defines an alternative name for an object. A reference type “refers to” another type*
+
+通过将声明符写成`&d`形式来定义引用类型，其中`d`是声明的变量名。  
+*We define a reference type by writing a declarator of the form &d, where d is the name being declared*
 
 ```cpp
 int ival = 2048;
@@ -19,9 +23,16 @@ int &refVal2；         //报错：引用必须被初始化
 ```
 
 一般初始化变量时，初始值会被拷贝到新建的对象中。  
+*Ordinarily, when we initialize a variable, the value of the initializer is copied into the object we are creating*
+
 然而定义引用时，程序把引用和它的初始值**绑定（bind）**在一起，而不是将初始值拷贝给引用。  
+*When we define a reference, instead of copying the initializer’s value, we bind the reference to its initializer*
+
 一旦引用完成，引用将和它的初始值对象一直绑定在一起。  
-因为无法另引用重新绑定到另一个对象，因此引用必须初始化。
+*Once initialized, a reference remains bound to its initial object*
+
+因为无法另引用重新绑定到另一个对象，因此引用必须初始化。  
+*There is no way to rebind a reference to refer to a different object. Because there is no way to rebind a reference, references must be initialized*
 
 ### 引用即别名
 > 引用并非对象，相反的，它只是为一个已经存在的对象所起的另外一个名字。

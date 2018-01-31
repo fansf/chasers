@@ -108,19 +108,29 @@ std::cout << u + i << std::endl;    //如果int占32位，输出4294967264
 当从无符号数中减去一个值时，不管这个值是不是无符号数，我们都必须确保结果不可能是一个负数。  
 *Regardless of whether one or both operands are unsigned, if we subtract a value from an unsigned, we must be sure that the result cannot be negative*
 
-无符号数不小于`0`这一事实同样关系到循环的写法。例如我们打算输出`10`到`0`的递减序列。
+无符号数不小于`0`这一事实同样关系到循环的写法。例如我们打算输出`10`到`0`的递减序列。  
+*The fact that an unsigned cannot be less than zero also affects how we write loops, For example, you were to write a loop that used the decrement operator to print the numbers from 10 down to 0*
+
 ```cpp
 for (int i = 10;i >= 0;--i)
     std::cout << i << std::endl;
 ```
-注意，使用无符号数重写这个循环就会发生错误。
+
+可能你觉得反正也不打算输出负数，可以用无符号数来重写这个循环。然而，这个不经意的改变却意味着死循环：  
+*We might think we could rewrite this loop using an unsigned. After all, we don’t plan to print negative numbers. However, this simple change in type means that our loop will never terminate*
+
 ```cpp
 //错误：变量u永远也不会小于0，循环条件一直成立
 for (unsigned u = 10;u >= 0;--u)
     std::cout << u << std::endl;
 ```
+
 当`u` 等于`-1`时会被转换成一个合理的无符号数。  
-我们可以使用`while`语句代替`for`语句，因为前者能够让我们在输出变量之前（而非之后）先减去`1`：
+*That expression, --u, subtracts 1 from u. That result, -1, won’t fit in an unsigned value. As with any other out-of-range value, -1 will be transformed to an unsigned value*
+
+我们可以使用`while`语句代替`for`语句，因为前者能够让我们在输出变量之前（而非之后）先减去`1`：  
+*One way to write this loop is to use a while instead of a for. Using a while lets us decrement before (rather than after) printing our value*
+
 ```cpp
 unsigned u = 11;
 while (u > 0){
@@ -130,38 +140,64 @@ while (u > 0){
 ```
 
 ## 字面值常量
-一个形如`56`的值被称作**字面值常量(literal)**，这样的值一望而知。每个字面值常量都对应一种数据类型，字面值常量的形式和值决定了它的数据类型。
+一个形如`56`的值被称作**字面值常量(literal)**，这样的值一望而知。每个字面值常量都对应一种数据类型，字面值常量的形式和值决定了它的数据类型。  
+*A value, such as 56, is known as a literal because its value self-evident. Every literal has a type. The form and value of a literal determine its type*
 
 ### 整型和浮点型字面值
 我们可以将整型字面值写作十进制数、八进制数或十六进制数的形式。  以`0`开头的整数代表八进制，以`0x`或`0X`开头的代表十六进制数。  
+*We can write an integer literal using decimal, octal, or hexadecimal notation. Integer literals that begin with 0 (zero) are interpreted as octal. Those that begin with either 0x or 0X are interpreted as hexadecimal*
+
 例如，我们可以用下面任意一种形式来表示数值`20`：  
+*For example, we can write the value 20 in any of the following three ways*
+
 > - 20        // 十进制
 > - 024      //八进制
 > - 0x14    //十六进制
 
 整型字面值具体的数据类型由它的值和符号决定。  
-默认情况下，十进制字面值是带符号数，八进制和十六进制字面值即可能是带符号的也可能是无符号的。  
-十进制字面值的类型是`int`，`long` 和 `long long`中尺寸最小的那个，前提是这种类型可能容纳下当前的值。  
-八进制和十六进制的字面值类型是能容纳其数值的`int`，`unsigned int`，`long`，`unsigned long`，`long long`和`unsigned long long`中尺寸最小者。  
-`short`没有对应的字面值。  
-我们亦可以在字面值加后缀代表字面值类型。
+*The type of an integer literal depends on its value and notation*
 
-尽管整型字面值可以存储在带符号数据类型中，但严格来说，十进制字面值不会是负数。如果我们使用了一个形如`-42`的负十进制字面值，那个负号并不在字面值内，它的作用仅仅是对字面值取负值而已。
+默认情况下，十进制字面值是带符号数，八进制和十六进制字面值即可能是带符号的也可能是无符号的。  
+*By default, decimal literals are signed whereas octal and hexadecimal literals can be either signed or unsigned types*
+
+十进制字面值的类型是`int`，`long` 和 `long long`中尺寸最小的那个，前提是这种类型可能容纳下当前的值。  
+*A decimal literal has the smallest type of int, long, or long long in which the literal’s value fits*
+
+八进制和十六进制的字面值类型是能容纳其数值的`int`，`unsigned int`，`long`，`unsigned long`，`long long`和`unsigned long long`中尺寸最小者。  
+*Octal and hexadecimal literals have the smallest type of int, unsigned int, long, unsigned long, long long, or unsigned long long in which the literal’s value fits*
+
+`short`没有对应的字面值。  
+*There are no literals of type short*
+
+我们亦可以在字面值加后缀代表字面值类型。  
+*we can override these defaults by using a suffix*
+
+尽管整型字面值可以存储在带符号数据类型中，但严格来说，十进制字面值不会是负数。如果我们使用了一个形如`-42`的负十进制字面值，那个负号并不在字面值内，它的作用仅仅是对字面值取负值而已。  
+*Although integer literals may be stored in signed types, technically speaking, the value of a decimal literal is never a negative number. If we write what appears to be a negative decimal literal, for example, -42, the minus sign is not part of the literal. The minus sign is an operator that negates the value of its (literal) operand*
 
 浮点型字面值表现为一个小数或者以科学计数法表示的指数，其中指数部分用`E`或`e`标识。  
+*Floating-point literals include either a decimal point or an exponent specified using scientific notation. Using scientific notation, the exponent is indicated by either E or e*
+
 `3.14    1,34E0    0.    0e0    .001`
 
-默认的，浮点类型字面值是一个`double`，我们同样可以使用后缀来表示其他浮点型。
+默认的，浮点类型字面值是一个`double`，我们同样可以使用后缀来表示其他浮点型。  
+*By default, floating-point literals have type double. We can override the default using a suffix*
 
 ### 字符和字符串字面值
 由单引号括起来的字符称为`char`型字面值，双引号括起来的零个或多个字符则构成字符串型字面值。  
+*A character enclosed within single quotes is a literal of type char. Zero or more characters enclosed in double quotation marks is a string literal*
+
 ```cpp
 'a'    //字符字面值
 "Hello World!"    //字符串字面值
 ```
-字符串字面值的类型实际上是由字符串常量构成的数组（array），该类型在[这儿 - 未完成]()介绍。编译器会在每个字符串的结尾处添加一个空字符（`'\0'`），因此，字符串字面值的实际长度要比它的内容多`1`。
 
-如果两个字符串字面值紧邻且仅由空格、缩进和换行符分隔，则它们实际上是一个整体。
+字符串字面值的类型实际上是由字符串常量构成的数组（array），该类型在[这儿 ](/knowledge/C++/the_basics/strings_vectors_arrays/arrays.md)做更多的介绍。编译器会在每个字符串的结尾处添加一个空字符（`'\0'`），因此，字符串字面值的实际长度要比它的内容多`1`。  
+*The type of a string literal is array of constant chars, The compiler appends a null character (’\0’) to every string literal. Thus, the actual size of a string literal is one more than its apparent size*
+
+如果两个字符串字面值紧邻且仅由空格、缩进和换行符分隔，则它们实际上是一个整体。  
+*Two string literals that appear adjacent to one another and that are separated only by spaces, tabs, or newlines are concatenated into a single literal*
+
 ```cpp
 // 分多行写的字符串字面值
 std::cout << "a really, really long string literal "
@@ -169,11 +205,15 @@ std::cout << "a really, really long string literal "
 ```
 
 ### 转义序列
-有两类字符我们不能直接使用：
-> - 不可打印的字符：如退格或其他控制字符，因为它们没有可视的图符。
-> - 在C++中有特殊含义的字符（单引号、双引号、问号、反斜线）
+有两类字符我们不能直接使用：  
+*Our programs cannot use any of these characters directly*  
+> - 不可打印的字符：如退格或其他控制字符，因为它们没有可视的图符。  
+>*backspace or control characters, have no visible image. Such characters are nonprintable*
+> - 在C++中有特殊含义的字符（单引号、双引号、问号、反斜线）  
+>*Other characters (single and double quotation marks, question mark, and backslash) have special meaning in the language*
 
 如果要使用在C++这些字符，我们需要用到**转义序列(escape sequence)**，转义序列均以反斜线作为开始，C++语言规定的转义序列包括：  
+*Instead, we use an escape sequence to represent such characters. An escape sequence begins with a backslash. The language defines several escape sequences*  
 > - `\n` 换行符
 > - `\t` 横向制表符
 > - `\a` 报警符
@@ -187,9 +227,11 @@ std::cout << "a really, really long string literal "
 > - `\f` 进纸符
 
 ### 指定字面值的类型
-前面谈到，我们可以添加后缀来指定整型、浮点型和字符型的字面值的默认类型。
+前面谈到，我们可以添加后缀来指定整型、浮点型和字符型的字面值的默认类型。  
+*We can override the default type of an integer, floating- point, or character literal by supplying a suffix or prefix*
 
 `42ULL` 无符号整型字面值，类型是`unsigned long long`
 
 ### 布尔字面值和指针字面值
-`true`和`false`是布尔类型的字面值
+`true`和`false`是布尔类型的字面值  
+*The words true and false are literals of type bool*
